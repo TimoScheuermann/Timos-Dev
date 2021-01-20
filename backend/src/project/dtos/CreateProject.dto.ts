@@ -1,5 +1,4 @@
-export interface IProject {
-  _id?: string;
+export class CreateProjectDTO {
   title: string;
   icon: string;
   description: string;

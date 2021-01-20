@@ -1,10 +1,12 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { rm } from 'fs/promises';
+import { isValidObjectId, Model } from 'mongoose';
 import { IProject } from 'src/project/interfaces/IProject.interface';
 import { IProjectNewsroom } from 'src/project/interfaces/IProjectNewsroom.interface';
 import { Project } from 'src/project/schemas/Project.schema';
 import { CreateNewsDTO } from './dtos/CreateNews.dto';
+import { UpdateNewsDTO } from './dtos/UpdateNews.dto';
 import { INews } from './interfaces/INews.interface';
 import { INewsExtended } from './interfaces/INewsExtended.interface';
 import { IUploadedFile } from './interfaces/IUploadedFile.interface';
@@ -52,6 +54,30 @@ export class NewsroomService {
     return news._id;
   }
 
+  public async deleteNews(id: string): Promise<void> {
+    if (!isValidObjectId(id)) {
+      await this.newsModel.deleteOne({ _id: id });
+    }
+  }
+
+  public async updateNews(
+    updateNewsDTO: UpdateNewsDTO,
+    thumbnail: IUploadedFile,
+  ): Promise<string> {
+    const { _id } = updateNewsDTO;
+    if (!isValidObjectId(_id)) {
+      throw new UnprocessableEntityException('incorrect id');
+    }
+    const oldNews = await this.newsModel.findOne({ _id: _id });
+    if (thumbnail) {
+      updateNewsDTO.thumbnail = thumbnail.filename;
+      rm('./uploads/newsroom/' + oldNews.thumbnail);
+    }
+    await this.newsModel.updateOne({ _id: _id }, { $set: updateNewsDTO });
+
+    return oldNews._id;
+  }
+
   public async getAvailableProjects(): Promise<IProjectNewsroom[]> {
     const projects: IProject[] = await this.projectModel.find({
       website: { $exists: true },
@@ -66,9 +92,10 @@ export class NewsroomService {
     });
   }
 
-  public async getNews(): Promise<INewsExtended[]> {
+  public async getNews(limit: number): Promise<INewsExtended[]> {
     const projects: IProjectNewsroom[] = await this.getAvailableProjects();
-    const news: INews[] = await this.newsModel.find().sort({ timestamp: 1 });
+    let news: INews[] = await this.newsModel.find().sort({ timestamp: 1 });
+    if (limit) news = news.slice(0, limit);
 
     const projectlink = (id: string) => {
       return projects.filter((x) => x._id === id)[0];

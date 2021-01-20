@@ -32,6 +32,7 @@ export class AuthService {
           ...u,
           firstLogin: date,
           lastLogin: date,
+          group: 'User',
         });
       } else {
         await user.updateOne({ $set: { lastLogin: date, avatar: u.avatar } });

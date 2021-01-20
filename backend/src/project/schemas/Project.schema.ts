@@ -29,6 +29,12 @@ export class Project extends Document {
 
   @Prop()
   tools: string[];
+
+  @Prop()
+  visible: boolean;
+
+  @Prop()
+  displayOnHome: boolean;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

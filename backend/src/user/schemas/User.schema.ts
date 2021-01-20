@@ -11,6 +11,9 @@ export class User extends Document {
   provider: Provider;
 
   @Prop()
+  group: string;
+
+  @Prop()
   username: string;
 
   @Prop()
