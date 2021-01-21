@@ -45,6 +45,7 @@ export class ProjectService {
       title,
       tools,
     } = createProjectDTO;
+
     if (!description || description.length === 0) {
       throw new UnprocessableEntityException('description missing');
     }
@@ -64,7 +65,10 @@ export class ProjectService {
       throw new UnprocessableEntityException('tools missing');
     }
 
-    const project = await this.projectModel.create(createProjectDTO);
+    const project = await this.projectModel.create({
+      ...createProjectDTO,
+      visible: true,
+    });
     return project._id;
   }
 

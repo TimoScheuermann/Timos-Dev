@@ -1,6 +1,6 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { rm } from 'fs/promises';
+import { rm } from 'fs';
 import { isValidObjectId, Model } from 'mongoose';
 import { IProject } from 'src/project/interfaces/IProject.interface';
 import { IProjectNewsroom } from 'src/project/interfaces/IProjectNewsroom.interface';
@@ -71,7 +71,9 @@ export class NewsroomService {
     const oldNews = await this.newsModel.findOne({ _id: _id });
     if (thumbnail) {
       updateNewsDTO.thumbnail = thumbnail.filename;
-      rm('./uploads/newsroom/' + oldNews.thumbnail);
+      rm('./uploads/newsroom/' + oldNews.thumbnail, () => {
+        console.log('cant delete old file', oldNews.thumbnail);
+      });
     }
     await this.newsModel.updateOne({ _id: _id }, { $set: updateNewsDTO });
 

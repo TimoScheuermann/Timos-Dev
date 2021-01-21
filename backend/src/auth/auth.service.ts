@@ -16,7 +16,10 @@ export class AuthService {
   ) {}
 
   public redirect(jwt: string, res: Response): void {
-    res.redirect(`${this.configService.get('REDIRECT')}?tlt=${jwt}`);
+    res.send(
+      `<script>window.opener.postMessage('tlt=${jwt}', '*');window.close();self.close();</script>`,
+    );
+    // res.redirect(`${this.configService.get('REDIRECT')}?tlt=${jwt}`);
   }
 
   async validateOAuthLogin(u: IUserLogin): Promise<string> {
