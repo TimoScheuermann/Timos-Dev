@@ -61,13 +61,9 @@ html {
     background: $background_dark;
     color: $color_dark;
   }
-  &.prevent-scroll {
-    overflow: hidden;
-    max-height: 100vh;
-    -webkit-overflow-scrolling: touch;
-  }
 }
 body {
+  min-height: 100vh;
   margin: 0;
 }
 h1,

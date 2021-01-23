@@ -23,10 +23,7 @@ export default class InterimProjects extends Vue {
   public hero = defaultHero;
 
   mounted() {
-    this.$on('hero-bg', (url: string) => {
-      console.log('change hero');
-      this.hero = url;
-    });
+    this.$on('hero-bg', (url: string) => (this.hero = url));
   }
 
   @Watch('$route', { deep: true, immediate: true })

@@ -64,7 +64,11 @@ export function signIn(provider = 'google') {
   window.onmessage = async (e: MessageEvent) => {
     if (e.data && String(e.data).startsWith('tlt=')) {
       if (
-        ['http://localhost:3000', 'https://api.timos.design'].includes(e.origin)
+        [
+          'http://localhost:3000',
+          'https://api.timos.design',
+          'https://api.timos.design:3002'
+        ].includes(e.origin)
       ) {
         const token = String(e.data).substring(4);
         persistLogin(token);

@@ -26,7 +26,7 @@
             :key="p._id"
             :icon="p.icon"
             :title="p.title"
-            :to="{ name: 'project-details', params: { id: p._id } }"
+            :to="{ name: 'project-details', params: { id: p.title } }"
           />
         </tc-list>
       </template>

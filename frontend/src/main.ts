@@ -7,7 +7,7 @@ import 'tccomponents_vue/lib/tccomponents_vue.css';
 import Vue from 'vue';
 import { Route } from 'vue-router';
 import './registerServiceWorker';
-import { getUserFromJWT, persistLogin, verfiyUser } from './utils/auth';
+import { getUserFromJWT, verfiyUser } from './utils/auth';
 
 Vue.config.productionTip = false;
 
@@ -15,15 +15,29 @@ for (const component in TCComponents) {
   Vue.component(component, TCComponents[component]);
 }
 
+const getDepth = (route: Route): number => {
+  let path = route.fullPath;
+  if (path.endsWith('/')) path = path.slice(0, -1);
+  return path.split('/').length;
+};
+
 router.beforeEach(async (to: Route, from: Route, next: Function) => {
-  const possibleToken = to.query.tlt as string;
-  if (possibleToken) {
-    persistLogin(possibleToken);
+  const toDepth = getDepth(to);
+  const fromDepth = getDepth(from);
+  const toPath = to.fullPath.split('/').slice(0, 2);
+  const fromPath = from.fullPath.split('/').slice(0, 2);
+
+  if (fromPath.join('/') !== toPath.join('/')) {
+    store.commit('routeTransition', 'slide-bottom');
+  } else {
+    store.commit(
+      'routeTransition',
+      toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    );
   }
 
   if (!store.getters.valid && (await verfiyUser())) {
     store.commit('signIn', getUserFromJWT());
-    if (possibleToken) await next({ name: 'home' });
   }
 
   if (to.name !== 'login' && !store.getters.valid) {

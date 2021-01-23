@@ -80,7 +80,6 @@ export default class CreateProject extends Vue {
 
   public submit() {
     this.disabled = true;
-    console.log(this.createProject);
 
     backend
       .post('project', this.createProject)
