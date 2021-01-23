@@ -1,13 +1,12 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { rm } from 'fs';
+import { unlink } from 'fs';
 import { isValidObjectId, Model } from 'mongoose';
 import { IProject } from 'src/project/interfaces/IProject.interface';
 import { IProjectNewsroom } from 'src/project/interfaces/IProjectNewsroom.interface';
 import { Project } from 'src/project/schemas/Project.schema';
 import { CreateNewsDTO } from './dtos/CreateNews.dto';
 import { UpdateNewsDTO } from './dtos/UpdateNews.dto';
-import { INews } from './interfaces/INews.interface';
 import { INewsExtended } from './interfaces/INewsExtended.interface';
 import { IUploadedFile } from './interfaces/IUploadedFile.interface';
 import { News } from './schemas/News.schema';
@@ -22,62 +21,68 @@ export class NewsroomService {
   public async createNews(
     createNewsDTO: CreateNewsDTO,
     thumbnail: IUploadedFile,
-  ): Promise<string> {
+  ): Promise<INewsExtended> {
     if (!thumbnail) {
       throw new UnprocessableEntityException('thumbnail missing');
     }
     const { content, project, timestamp, title, type } = createNewsDTO;
     if (!content) {
+      this.deleteThumbnail(thumbnail.filename);
       throw new UnprocessableEntityException('content missing');
     }
     if (!project) {
+      this.deleteThumbnail(thumbnail.filename);
       throw new UnprocessableEntityException('project missing');
     }
     if (!timestamp) {
+      this.deleteThumbnail(thumbnail.filename);
       throw new UnprocessableEntityException('timestamp missing');
     }
     if (!title) {
+      this.deleteThumbnail(thumbnail.filename);
       throw new UnprocessableEntityException('title missing');
     }
     if (!type) {
+      this.deleteThumbnail(thumbnail.filename);
       throw new UnprocessableEntityException('type missing');
     }
+    createNewsDTO.timestamp = +createNewsDTO.timestamp;
 
     const news = await this.newsModel.create({
-      content: content,
-      project: project,
-      timestamp: timestamp,
-      title: title,
-      type: type,
+      ...createNewsDTO,
       thumbnail: thumbnail.filename,
     });
-    return news._id;
+    return (await this.mapNews([news]))[0];
   }
 
   public async deleteNews(id: string): Promise<void> {
-    if (!isValidObjectId(id)) {
-      await this.newsModel.deleteOne({ _id: id });
+    if (isValidObjectId(id)) {
+      const news = await this.newsModel.findOne({ _id: id });
+      if (news) {
+        this.deleteThumbnail(news.thumbnail);
+        await this.newsModel.deleteOne({ _id: id });
+      }
     }
   }
 
   public async updateNews(
     updateNewsDTO: UpdateNewsDTO,
     thumbnail: IUploadedFile,
-  ): Promise<string> {
+  ): Promise<INewsExtended> {
     const { _id } = updateNewsDTO;
-    if (!isValidObjectId(_id)) {
+    if (!_id || _id.length === 0 || !isValidObjectId(_id)) {
       throw new UnprocessableEntityException('incorrect id');
     }
     const oldNews = await this.newsModel.findOne({ _id: _id });
     if (thumbnail) {
       updateNewsDTO.thumbnail = thumbnail.filename;
-      rm('./uploads/newsroom/' + oldNews.thumbnail, () => {
-        console.log('cant delete old file', oldNews.thumbnail);
-      });
+      this.deleteThumbnail(oldNews.thumbnail);
     }
     await this.newsModel.updateOne({ _id: _id }, { $set: updateNewsDTO });
 
-    return oldNews._id;
+    const news = await this.newsModel.findOne({ _id: _id });
+
+    return (await this.mapNews([news]))[0];
   }
 
   public async getAvailableProjects(): Promise<IProjectNewsroom[]> {
@@ -94,11 +99,31 @@ export class NewsroomService {
     });
   }
 
-  public async getNews(limit: number): Promise<INewsExtended[]> {
-    const projects: IProjectNewsroom[] = await this.getAvailableProjects();
-    let news: INews[] = await this.newsModel.find().sort({ timestamp: 1 });
-    if (limit) news = news.slice(0, limit);
+  public async getNews(
+    limit: number | null = 100000,
+  ): Promise<INewsExtended[]> {
+    const news: News[] = await this.newsModel
+      .find()
+      .sort({ timestamp: 1 })
+      .limit(limit);
 
+    return await this.mapNews(news);
+  }
+
+  private deleteThumbnail(filename: string) {
+    unlink('./uploads/newsroom/' + filename, (error) => {
+      if (error && error.code == 'ENOENT') {
+        console.info("File doesn't exsit, won't remove it");
+      } else if (error) {
+        console.error('Error occurred while trying to remove file', error);
+      } else {
+        console.info('Old news-thumbnail removed');
+      }
+    });
+  }
+
+  private async mapNews(news: News[]): Promise<INewsExtended[]> {
+    const projects: IProjectNewsroom[] = await this.getAvailableProjects();
     const projectlink = (id: string) => {
       return projects.filter((x) => x._id === id)[0];
     };
@@ -107,7 +132,8 @@ export class NewsroomService {
       return {
         content: x.content,
         project: projectlink(x._id),
-        thumbnail: x.thumbnail,
+        thumbnail:
+          'https://api.timos.design:3002/newsroom/thumbnail/' + x.thumbnail,
         timestamp: x.timestamp,
         title: x.title,
         type: x.type,

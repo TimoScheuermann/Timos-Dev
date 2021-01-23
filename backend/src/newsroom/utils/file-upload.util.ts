@@ -6,7 +6,9 @@ export function imageFileFilter(
   file: IUploadedFile,
   callback: any,
 ): void {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
+  if (
+    !file.originalname.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp|svg)$/)
+  ) {
     return callback(new Error('Only image files are allowed!'), false);
   }
   callback(null, true);

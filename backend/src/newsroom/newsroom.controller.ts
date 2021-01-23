@@ -51,7 +51,7 @@ export class NewsroomController {
   async createNews(
     @UploadedFile() thumbnail: IUploadedFile,
     @Body() createNewsDTO: CreateNewsDTO,
-  ): Promise<string> {
+  ): Promise<INewsExtended> {
     return this.newsroomService.createNews(createNewsDTO, thumbnail);
   }
 
@@ -62,7 +62,7 @@ export class NewsroomController {
   async updateNews(
     @UploadedFile() thumbnail: IUploadedFile,
     @Body() updateNewsDTO: UpdateNewsDTO,
-  ): Promise<string> {
+  ): Promise<INewsExtended> {
     return this.newsroomService.updateNews(updateNewsDTO, thumbnail);
   }
 

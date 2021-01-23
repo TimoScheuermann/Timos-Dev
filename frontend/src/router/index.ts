@@ -82,6 +82,74 @@ const router = new VueRouter({
       ]
     },
     {
+      path: '/translator',
+      component: () => import('@/views-interim/Translator-Interim.vue'),
+      children: [
+        {
+          path: '',
+          name: 'translator',
+          component: () => import('@/views/translator/Translator.vue'),
+          meta: {
+            title: prefix + "Timo's Translator"
+          }
+        },
+        {
+          path: 'word/create',
+          name: 'create-word',
+          component: () => import('@/views/translator/CreateWord.vue'),
+          meta: {
+            title: prefix + 'Create Word'
+          }
+        },
+        {
+          path: 'word/:id',
+          name: 'edit-word',
+          component: () => import('@/views/translator/EditWord.vue'),
+          meta: {
+            title: prefix + 'Edit Word'
+          }
+        },
+        {
+          path: '*',
+          redirect: { name: 'translator' }
+        }
+      ]
+    },
+    {
+      path: '/newsroom',
+      component: () => import('@/views-interim/Newsroom-Interim.vue'),
+      children: [
+        {
+          path: '',
+          name: 'newsroom',
+          component: () => import('@/views/newsroom/Newsroom.vue'),
+          meta: {
+            title: prefix + "Timo's Newsroom"
+          }
+        },
+        {
+          path: 'news/create',
+          name: 'create-news',
+          component: () => import('@/views/newsroom/CreateNews.vue'),
+          meta: {
+            title: prefix + 'Create News'
+          }
+        },
+        {
+          path: 'news/:id',
+          name: 'update-news',
+          component: () => import('@/views/newsroom/UpdateNews.vue'),
+          meta: {
+            title: prefix + 'Update News'
+          }
+        },
+        {
+          path: '*',
+          redirect: { name: 'newsroom' }
+        }
+      ]
+    },
+    {
       path: '*',
       redirect: { name: 'home' }
     }

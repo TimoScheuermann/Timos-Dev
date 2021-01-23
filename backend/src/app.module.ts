@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { NewsroomModule } from './newsroom/newsroom.module';
 import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
+import { TranslatorModule } from './projects/translator/translator.module';
+import { IconsModule } from './projects/icons/icons.module';
 
 @Module({
   controllers: [AppController],
@@ -29,6 +31,8 @@ import { ProjectModule } from './project/project.module';
     UserModule,
     NewsroomModule,
     ProjectModule,
+    TranslatorModule,
+    IconsModule,
   ],
 })
 export class AppModule {}

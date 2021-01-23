@@ -11,6 +11,11 @@ import { getUserFromJWT, verfiyUser } from './utils/auth';
 
 Vue.config.productionTip = false;
 
+Vue.prototype.$translatorBanner =
+  'https://timos.design/assets/projects/timostranslator/thumbnail.png';
+Vue.prototype.$newsroomBanner =
+  'https://timos.design/assets/projects/timosnewsroom/thumbnail.png';
+
 for (const component in TCComponents) {
   Vue.component(component, TCComponents[component]);
 }

@@ -22,3 +22,19 @@ export interface IProject {
   thumbnail: string;
   tools: string[];
 }
+export interface IWord {
+  _id: string;
+  acronym: string;
+  meaning: string;
+  description: string;
+}
+
+export interface INewsExtended {
+  _id: string;
+  title: string;
+  project: IProject;
+  type: 'update' | 'release' | 'feature';
+  timestamp: number;
+  content: string;
+  thumbnail: string;
+}

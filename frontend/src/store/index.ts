@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IProject, IUser } from '@/utils/interfaces';
+import { INewsExtended, IProject, IUser, IWord } from '@/utils/interfaces';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -11,7 +11,9 @@ const store = new Vuex.Store({
     routeTransition: 'slide-left',
     user: {} as IUser,
     userValidated: false,
-    projects: null
+    projects: null,
+    words: null,
+    news: null
   },
   getters: {
     isDesktop: (state: any): boolean => {
@@ -33,6 +35,16 @@ const store = new Vuex.Store({
       const projects: IProject[] | null = state.projects;
       if (!projects) return null;
       return projects.sort((a, b) => a.title.localeCompare(b.title));
+    },
+    words: (state: any): IWord[] | null => {
+      const words: IWord[] | null = state.words;
+      if (!words) return null;
+      return words.sort((a, b) => a.acronym.localeCompare(b.acronym));
+    },
+    news: (state: any): INewsExtended[] | null => {
+      const news: INewsExtended[] | null = state.news;
+      if (!news) return null;
+      return news.sort((a, b) => b.timestamp - a.timestamp);
     }
   },
   mutations: {
@@ -58,6 +70,50 @@ const store = new Vuex.Store({
     updateProjects(state: any, projects: IProject[] | null) {
       if (projects) {
         state.projects = projects;
+      }
+    },
+    setWords(state: any, words: IWord[]) {
+      state.words = words;
+    },
+    addWord(state: any, word: IWord | null) {
+      if (word) {
+        if (!state.words) state.words = [];
+        const words: IWord[] = state.words;
+        if (!words.map(x => x._id).includes(word._id)) {
+          state.words.push(word);
+          return;
+        }
+        state.words = words.map(x => {
+          if (x._id !== word._id) return x;
+          else return word;
+        });
+      }
+    },
+    removeWord(state: any, id: string) {
+      if (id && state.words) {
+        state.words = state.words.filter((x: IWord) => x._id !== id);
+      }
+    },
+    setNews(state: any, news: INewsExtended[]) {
+      state.news = news;
+    },
+    addNews(state: any, news: INewsExtended | null) {
+      if (news) {
+        if (!state.news) state.news = [];
+        const everyNews: INewsExtended[] = state.news;
+        if (!everyNews.map(x => x._id).includes(news._id)) {
+          state.news.push(news);
+          return;
+        }
+        state.news = everyNews.map(x => {
+          if (x._id !== news._id) return x;
+          else return news;
+        });
+      }
+    },
+    removeNews(state: any, id: string) {
+      if (id && state.news) {
+        state.news = state.news.filter((x: INewsExtended) => x._id !== id);
       }
     }
   }
