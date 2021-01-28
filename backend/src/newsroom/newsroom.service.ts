@@ -65,11 +65,45 @@ export class NewsroomService {
     }
   }
 
+  public async addFeatured(
+    id: string,
+    featured: IUploadedFile,
+  ): Promise<INewsExtended> {
+    if (!id || id.length === 0 || !isValidObjectId(id)) {
+      throw new UnprocessableEntityException('incorrect id');
+    }
+    const oldNews = await this.newsModel.findOne({ _id: id });
+    if (featured && oldNews) {
+      this.deleteThumbnail(oldNews.featured);
+      await this.newsModel.updateOne(
+        { _id: id },
+        { $set: { featured: featured.filename } },
+      );
+    }
+
+    const news = await this.newsModel.findOne({ _id: id });
+    return (await this.mapNews([news]))[0];
+  }
+
+  public async removeFeatured(id: string): Promise<INewsExtended> {
+    if (!isValidObjectId(id)) {
+      throw new UnprocessableEntityException('incorrect id');
+    }
+    const news = await this.newsModel.findOne({ _id: id });
+    if (news && news.featured) {
+      this.deleteThumbnail(news.featured);
+    }
+    await news.updateOne({ $unset: { featured: 1 } });
+
+    return (await this.mapNews([news]))[0];
+  }
+
   public async updateNews(
     updateNewsDTO: UpdateNewsDTO,
     thumbnail: IUploadedFile,
   ): Promise<INewsExtended> {
     const { _id } = updateNewsDTO;
+
     if (!_id || _id.length === 0 || !isValidObjectId(_id)) {
       throw new UnprocessableEntityException('incorrect id');
     }
@@ -78,6 +112,7 @@ export class NewsroomService {
       updateNewsDTO.thumbnail = thumbnail.filename;
       this.deleteThumbnail(oldNews.thumbnail);
     }
+
     await this.newsModel.updateOne({ _id: _id }, { $set: updateNewsDTO });
 
     const news = await this.newsModel.findOne({ _id: _id });
@@ -101,13 +136,41 @@ export class NewsroomService {
 
   public async getNews(
     limit: number | null = 100000,
+    project: string | null = null,
+    skip: number | null = 0,
   ): Promise<INewsExtended[]> {
-    const news: News[] = await this.newsModel
-      .find()
+    let news: News[] = [];
+    let projectFilter = null;
+
+    if (project) {
+      if (!isValidObjectId(project)) {
+        const reg = new RegExp(`${project}`, 'i');
+        const projectObj = await this.projectModel.findOne({ title: reg });
+
+        if (!projectObj) return [];
+        else project = projectObj._id;
+      }
+      projectFilter = { project: project };
+    }
+    news = await this.newsModel
+      .find(projectFilter)
       .sort({ timestamp: 1 })
-      .limit(limit);
+      .skip(skip)
+      .limit(limit)
+      .sort({ timestamp: -1 });
 
     return await this.mapNews(news);
+  }
+
+  public async getRelevantProjects(): Promise<string[]> {
+    const projectIds = await this.newsModel
+      .aggregate([{ $sortByCount: '$project' }])
+      .sort({ count: -1 });
+    return Promise.all(
+      projectIds.map(async (x) => {
+        return (await this.projectModel.findOne({ _id: x._id })).title;
+      }),
+    );
   }
 
   private deleteThumbnail(filename: string) {
@@ -124,14 +187,13 @@ export class NewsroomService {
 
   private async mapNews(news: News[]): Promise<INewsExtended[]> {
     const projects: IProjectNewsroom[] = await this.getAvailableProjects();
-    const projectlink = (id: string) => {
-      return projects.filter((x) => x._id === id)[0];
-    };
+    const projectlink = (id: string) =>
+      projects.filter((x) => x._id + '' === id)[0];
 
     return news.map((x) => {
       return {
         content: x.content,
-        project: projectlink(x._id),
+        project: projectlink(x.project),
         thumbnail:
           'https://api.timos.design:3002/newsroom/thumbnail/' + x.thumbnail,
         timestamp: x.timestamp,

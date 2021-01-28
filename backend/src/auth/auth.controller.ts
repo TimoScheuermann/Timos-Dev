@@ -18,7 +18,6 @@ export class AuthController {
   // eslint-disable-next-line
   googleLoginCallback(@Req() req: any, @Res() res: Response): void {
     const jwt: string = req.user.jwt;
-    // console.log(req);
     this.authService.redirect(jwt, res);
   }
 }

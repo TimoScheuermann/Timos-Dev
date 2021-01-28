@@ -20,7 +20,7 @@
 
       <template v-else>
         <br />
-        <tc-segments :value="1" :dark="$store.getters.darkmode">
+        <tc-segments :value="0" :dark="$store.getters.darkmode">
           <tc-segment-item title="List">
             <tc-list :dark="$store.getters.darkmode">
               <tc-list-item

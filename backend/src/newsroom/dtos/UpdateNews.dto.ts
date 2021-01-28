@@ -6,4 +6,5 @@ export class UpdateNewsDTO {
   timestamp?: number;
   content?: string;
   thumbnail?: string;
+  featured?: string;
 }

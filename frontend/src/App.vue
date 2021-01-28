@@ -93,4 +93,9 @@ h2 {
 [line-break] {
   white-space: pre-line;
 }
+
+[input-and-button] {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
 </style>

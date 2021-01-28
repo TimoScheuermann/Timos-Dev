@@ -20,6 +20,9 @@ export class News extends Document {
 
   @Prop()
   thumbnail: string;
+
+  @Prop({ required: false })
+  featured?: string;
 }
 
 export const NewsSchema = SchemaFactory.createForClass(News);

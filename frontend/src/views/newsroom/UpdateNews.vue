@@ -72,6 +72,35 @@
         name="remove news"
       />
     </tl-grid>
+
+    <br />
+    <tc-divider :dark="$store.getters.darkmode" />
+    <br />
+
+    <tc-input
+      type="file"
+      title="Featured"
+      :dark="$store.getters.darkmode"
+      @change="featuredChanged"
+    />
+
+    <br />
+    <tl-grid minWidth="100" gap="0">
+      <tc-button
+        :disabled="disabled"
+        @click="updateFeatured"
+        variant="filled"
+        tfbackground="success"
+        name="update featured"
+      />
+      <tc-button
+        :disabled="disabled"
+        @click="removeFeatured"
+        variant="filled"
+        tfbackground="error"
+        name="remove featured"
+      />
+    </tl-grid>
   </div>
 </template>
 
@@ -84,6 +113,7 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 export default class UpdateNews extends Vue {
   public file: null | File = null;
+  public featuredFile: null | File = null;
   public disabled = false;
   public updateDTO: UpdateNewsDTO = new UpdateNewsDTO();
   public projects: IProject[] | null = null;
@@ -129,10 +159,49 @@ export default class UpdateNews extends Vue {
       '';
   }
 
+  public featuredChanged(e: Event): void {
+    const element = e.target as HTMLInputElement;
+    if (element.files) {
+      this.featuredFile = element.files[0];
+    }
+  }
+
   public fileChanged(e: Event): void {
     const element = e.target as HTMLInputElement;
     if (element.files) {
       this.file = element.files[0];
+    }
+  }
+
+  public removeFeatured(): void {
+    if (this.currentNews) {
+      backend
+        .delete('newsroom/featured/' + this.currentNews._id)
+        .then(res => {
+          this.$store.commit('addNews', res.data);
+          this.$router.push({ name: 'newsroom' });
+        })
+        .catch(error => {
+          this.disabled = false;
+          alert(error.message);
+        });
+    }
+  }
+
+  public updateFeatured(): void {
+    if (this.currentNews && this.featuredFile) {
+      const formData = new FormData();
+      formData.append('featured', this.featuredFile, this.featuredFile.name);
+      backend
+        .put('newsroom/featured/' + this.currentNews._id, formData)
+        .then(res => {
+          this.$store.commit('addNews', res.data);
+          this.$router.push({ name: 'newsroom' });
+        })
+        .catch(error => {
+          this.disabled = false;
+          alert(error.message);
+        });
     }
   }
 
@@ -141,7 +210,11 @@ export default class UpdateNews extends Vue {
     this.disabled = true;
 
     const formData = new FormData();
-    if (this.file) formData.append('thumbnail', this.file, this.file.name);
+
+    if (this.file) {
+      formData.append('thumbnail', this.file, this.file.name);
+    }
+
     Object.entries(this.updateDTO).forEach(([key, value]) => {
       if (value) {
         if (key === 'timestamp') {
@@ -155,7 +228,6 @@ export default class UpdateNews extends Vue {
     backend
       .put('newsroom', formData)
       .then(res => {
-        console.log('Data', res.data);
         this.$store.commit('addNews', res.data);
         this.$router.push({ name: 'newsroom' });
       })

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Res,
   UploadedFile,
   UseGuards,
@@ -27,13 +28,22 @@ export class NewsroomController {
   constructor(private readonly newsroomService: NewsroomService) {}
 
   @Get('')
-  async getNews(@Param('limit') limit: number): Promise<INewsExtended[]> {
-    return this.newsroomService.getNews(limit);
+  async getNews(
+    @Query('limit') limit: number,
+    @Query('project') project: string,
+    @Query('skip') skip: number,
+  ): Promise<INewsExtended[]> {
+    return this.newsroomService.getNews(+limit, project, +skip);
   }
 
   @Get('projects')
   async getProjectsNewsroom(): Promise<IProjectNewsroom[]> {
     return this.newsroomService.getAvailableProjects();
+  }
+
+  @Get('projects/relevant')
+  async getRelevantProjects(): Promise<string[]> {
+    return this.newsroomService.getRelevantProjects();
   }
 
   @Get('thumbnail/:image')
@@ -64,6 +74,24 @@ export class NewsroomController {
     @Body() updateNewsDTO: UpdateNewsDTO,
   ): Promise<INewsExtended> {
     return this.newsroomService.updateNews(updateNewsDTO, thumbnail);
+  }
+
+  @TGroups(['Admin'])
+  @UseGuards(AuthGuard('jwt'), GroupsGuard)
+  @Put('featured/:id')
+  @UseInterceptors(FileInterceptor('featured'))
+  async addFeatured(
+    @Param('id') id: string,
+    @UploadedFile() featured: IUploadedFile,
+  ): Promise<INewsExtended> {
+    return this.newsroomService.addFeatured(id, featured);
+  }
+
+  @TGroups(['Admin'])
+  @UseGuards(AuthGuard('jwt'), GroupsGuard)
+  @Delete('featured/:id')
+  async removeFeatured(@Param('id') id: string): Promise<INewsExtended> {
+    return this.newsroomService.removeFeatured(id);
   }
 
   @TGroups(['Admin'])
