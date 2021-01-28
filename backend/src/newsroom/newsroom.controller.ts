@@ -36,6 +36,23 @@ export class NewsroomController {
     return this.newsroomService.getNews(+limit, project, +skip);
   }
 
+  @Get('news/:id')
+  async getNewsById(@Param('id') id: string): Promise<INewsExtended | null> {
+    return this.newsroomService.getNewsById(id);
+  }
+
+  @Get('search')
+  async getNewsByQuery(
+    @Query('query') query: string,
+  ): Promise<INewsExtended[]> {
+    return this.newsroomService.getNewsByQuery(query);
+  }
+
+  @Get('featured')
+  async getFeaturedNews(): Promise<INewsExtended[]> {
+    return this.newsroomService.getFeaturedNews();
+  }
+
   @Get('projects')
   async getProjectsNewsroom(): Promise<IProjectNewsroom[]> {
     return this.newsroomService.getAvailableProjects();

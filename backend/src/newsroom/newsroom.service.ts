@@ -65,6 +65,38 @@ export class NewsroomService {
     }
   }
 
+  public async getNewsById(id: string): Promise<INewsExtended> {
+    let news: News | null = null;
+    if (!isValidObjectId(id)) {
+      const reg = new RegExp(`${id}`, 'i');
+      news = await this.newsModel.findOne({ title: reg });
+    } else {
+      news = await this.newsModel.findOne({ _id: id });
+    }
+
+    return (await this.mapNews([news]))[0];
+  }
+
+  public async getNewsByQuery(query: string): Promise<INewsExtended[]> {
+    if (!query) {
+      return this.getNews(null, null, null);
+    }
+
+    const reg = new RegExp(`${query}`, 'img');
+    const news = await this.newsModel.find({
+      $or: [
+        { title: reg },
+        { thumbnail: reg },
+        { content: reg },
+        { project: reg },
+        { id: reg },
+        { type: reg },
+      ],
+    });
+
+    return await this.mapNews(news);
+  }
+
   public async addFeatured(
     id: string,
     featured: IUploadedFile,
@@ -162,6 +194,13 @@ export class NewsroomService {
     return await this.mapNews(news);
   }
 
+  public async getFeaturedNews(): Promise<any[]> {
+    const newsValid = await this.newsModel.find({
+      featured: { $exists: true },
+    });
+    return await this.mapNews(newsValid);
+  }
+
   public async getRelevantProjects(): Promise<string[]> {
     const projectIds = await this.newsModel
       .aggregate([{ $sortByCount: '$project' }])
@@ -197,9 +236,12 @@ export class NewsroomService {
         thumbnail:
           'https://api.timos.design:3002/newsroom/thumbnail/' + x.thumbnail,
         timestamp: x.timestamp,
+
         title: x.title,
         type: x.type,
         _id: x._id,
+        featured:
+          'https://api.timos.design:3002/newsroom/thumbnail/' + x.featured,
       } as INewsExtended;
     });
   }

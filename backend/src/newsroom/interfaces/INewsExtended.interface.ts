@@ -8,4 +8,5 @@ export interface INewsExtended {
   timestamp: number;
   content: string;
   thumbnail: string;
+  featured?: string;
 }
