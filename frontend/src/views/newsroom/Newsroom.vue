@@ -40,6 +40,15 @@
         </tc-segments>
       </template>
     </template>
+
+    <br />
+    <tc-button
+      name="Create Icon Thumbnail"
+      icon="timos-icons"
+      variant="filled"
+      tfbackground="error"
+      routeName="generate-icon-thumbnail"
+    />
   </div>
 </template>
 
@@ -88,5 +97,10 @@ export default class Newsroom extends Vue {
   @media only screen and(min-width: 1000px) {
     columns: 5;
   }
+}
+.tc-list {
+  max-height: 400px;
+  overflow: auto;
+  @include custom-scrollbar__dark();
 }
 </style>

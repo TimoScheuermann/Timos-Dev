@@ -136,6 +136,14 @@ const router = new VueRouter({
           }
         },
         {
+          path: 'news/generate-icon-thumbnail',
+          name: 'generate-icon-thumbnail',
+          component: () => import('@/views/newsroom/GenerateIconThumbnail.vue'),
+          meta: {
+            title: prefix + 'Generate Icon Thumbnail'
+          }
+        },
+        {
           path: 'news/:id',
           name: 'update-news',
           component: () => import('@/views/newsroom/UpdateNews.vue'),

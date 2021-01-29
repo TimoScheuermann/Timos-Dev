@@ -10,7 +10,7 @@
     <div class="container">
       <div class="type">{{ news.type }}</div>
       <div class="title">{{ news.title }}</div>
-      <div class="content" line-break>{{ news.content }}</div>
+      <!-- <div class="content" line-break>{{ news.content }}</div> -->
     </div>
   </router-link>
 </template>
