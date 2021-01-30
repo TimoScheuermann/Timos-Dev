@@ -33,7 +33,6 @@ export class DriveController {
 
   @TGroups(['admin'])
   @UseGuards(AuthGuard('jwt'), GroupsGuard)
-  @UseInterceptors(FilesInterceptor('files[]'))
   @Delete(':id')
   async deleteFile(@Param('id') id: string): Promise<void> {
     this.driveService.deleteItem(id);
@@ -41,7 +40,6 @@ export class DriveController {
 
   @TGroups(['admin'])
   @UseGuards(AuthGuard('jwt'), GroupsGuard)
-  @UseInterceptors(FilesInterceptor('files[]'))
   @Get('files')
   async getFiles(): Promise<IDriveItem[]> {
     return this.driveService.getItems();
