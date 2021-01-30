@@ -21,6 +21,12 @@
           :background="$translatorBanner"
           :to="{ name: 'translator' }"
         />
+        <DevProjectCard
+          subtitle="Manage files"
+          title="Drive"
+          background="https://images.unsplash.com/photo-1562414962-a6b4f966070d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=20"
+          :to="{ name: 'drive' }"
+        />
       </tl-grid>
     </div>
   </div>

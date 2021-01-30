@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { TranslatorModule } from './projects/translator/translator.module';
 import { IconsModule } from './projects/icons/icons.module';
+import { DriveModule } from './drive/drive.module';
 
 @Module({
   controllers: [AppController],
@@ -33,6 +34,7 @@ import { IconsModule } from './projects/icons/icons.module';
     ProjectModule,
     TranslatorModule,
     IconsModule,
+    DriveModule,
   ],
 })
 export class AppModule {}

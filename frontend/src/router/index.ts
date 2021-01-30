@@ -28,6 +28,14 @@ const router = new VueRouter({
       }
     },
     {
+      path: '/drive',
+      name: 'drive',
+      component: () => import('@/views/drive/Drive.vue'),
+      meta: {
+        title: prefix + 'Drive'
+      }
+    },
+    {
       path: '/projects',
       component: () => import('@/views-interim/Projects-Interim.vue'),
       children: [

@@ -215,11 +215,14 @@ export class NewsroomService {
   private deleteThumbnail(filename: string) {
     unlink('./uploads/newsroom/' + filename, (error) => {
       if (error && error.code == 'ENOENT') {
-        console.info("File doesn't exsit, won't remove it");
+        console.info("[Newsroom]\tFile doesn't exsit, won't remove it");
       } else if (error) {
-        console.error('Error occurred while trying to remove file', error);
+        console.error(
+          '[Newsroom]\tError occurred while trying to remove file',
+          error,
+        );
       } else {
-        console.info('Old news-thumbnail removed');
+        console.info('[Newsroom]\tOld news-thumbnail removed');
       }
     });
   }
