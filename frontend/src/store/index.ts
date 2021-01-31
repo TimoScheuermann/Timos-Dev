@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { INewsExtended, IProject, IUser, IWord } from '@/utils/interfaces';
+import { UpdateSectionsDTO } from '@/utils/models';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -70,6 +71,17 @@ const store = new Vuex.Store({
     updateProjects(state: any, projects: IProject[] | null) {
       if (projects) {
         state.projects = projects;
+      }
+    },
+    updateSections(state: any, dto: UpdateSectionsDTO) {
+      if (state.projects) {
+        state.projects = state.projects.map((x: IProject) => {
+          if (x._id === dto._id) return x;
+          return {
+            ...x,
+            sections: dto.sections
+          } as IProject;
+        });
       }
     },
     setWords(state: any, words: IWord[]) {

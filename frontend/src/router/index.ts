@@ -84,6 +84,17 @@ const router = new VueRouter({
           }
         },
         {
+          path: ':id/sections',
+          name: 'edit-portfolio-sections',
+          component: () => import('@/views/projects/EditPortfolioSections.vue'),
+          meta: {
+            title: prefix + 'Update Sections',
+            hero: {
+              title: 'Update Sections'
+            }
+          }
+        },
+        {
           path: '*',
           redirect: { name: 'projects' }
         }

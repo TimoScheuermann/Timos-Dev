@@ -85,8 +85,8 @@ h2 {
 
 [content] {
   padding: 20px 5vw calc(20px + env(safe-area-inset-bottom));
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
   @media #{$isMobile} {
-    padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
 }
 

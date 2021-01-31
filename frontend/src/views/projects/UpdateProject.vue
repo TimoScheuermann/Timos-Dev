@@ -38,6 +38,56 @@
       title="Display on Home"
     />
     <br />
+
+    <tl-grid minWidth="100" gap="0">
+      <tc-select
+        :showSelection="false"
+        tfbackground="error"
+        :multiple="true"
+        :dark="$store.getters.darkmode"
+        placeholder="Design Tools"
+        @selectedItems="i => (updateDTO.designTools = i)"
+      >
+        <tc-select-item
+          v-for="i in designTools"
+          :key="i"
+          :title="i"
+          :defaultSelected="project.designTools.includes(i)"
+        />
+      </tc-select>
+      <tc-select
+        :showSelection="false"
+        tfbackground="error"
+        :multiple="true"
+        :dark="$store.getters.darkmode"
+        placeholder="Frameworks"
+        @selectedItems="i => (updateDTO.frameworks = i)"
+      >
+        <tc-select-item
+          v-for="i in frameworks"
+          :key="i"
+          :title="i"
+          :defaultSelected="project.frameworks.includes(i)"
+        />
+      </tc-select>
+      <tc-select
+        :showSelection="false"
+        tfbackground="error"
+        :multiple="true"
+        :dark="$store.getters.darkmode"
+        placeholder="Development"
+        @selectedItems="i => (updateDTO.development = i)"
+      >
+        <tc-select-item
+          v-for="i in development"
+          :key="i"
+          :title="i"
+          :defaultSelected="project.development.includes(i)"
+        />
+      </tc-select>
+    </tl-grid>
+
+    <br />
     <tc-divider name="Optional" :dark="$store.getters.darkmode" />
 
     <tc-input
@@ -76,6 +126,7 @@
 
 <script lang="ts">
 import backend from '@/utils/backend';
+import { designTools, development, frameworks } from '@/utils/constants';
 import { IProject } from '@/utils/interfaces';
 import { UpdateProjectDTO } from '@/utils/models';
 import { Vue, Component } from 'vue-property-decorator';
@@ -84,6 +135,9 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class UpdateProject extends Vue {
   public disabled = false;
   public updateDTO: UpdateProjectDTO = new UpdateProjectDTO();
+  public designTools = designTools;
+  public frameworks = frameworks;
+  public development = development;
 
   async mounted() {
     if (!this.project) {
@@ -98,6 +152,9 @@ export default class UpdateProject extends Vue {
       this.updateDTO = new UpdateProjectDTO();
       this.updateDTO.displayOnHome = this.project.displayOnHome;
       this.updateDTO._id = this.project._id;
+      this.updateDTO.designTools = this.project.designTools;
+      this.updateDTO.frameworks = this.project.frameworks;
+      this.updateDTO.development = this.project.development;
     }
   }
 

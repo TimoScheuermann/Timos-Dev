@@ -1,3 +1,5 @@
+import { IProjectSection } from './interfaces';
+
 export class UpdateProjectDTO {
   _id = '';
   title?: string;
@@ -9,7 +11,9 @@ export class UpdateProjectDTO {
   hero?: string;
   displayOnHome?: boolean;
   thumbnail?: string;
-  tools?: string[];
+  designTools?: string[];
+  frameworks?: string[];
+  development?: string[];
 }
 
 export class CreateProjectDTO {
@@ -22,7 +26,9 @@ export class CreateProjectDTO {
   hero = '';
   displayOnHome = false;
   thumbnail = '';
-  tools: string[] = [];
+  designTools: string[] = [];
+  frameworks: string[] = [];
+  development: string[] = [];
 }
 export class CreateWordDTO {
   acronym = '';
@@ -53,4 +59,9 @@ export class UpdateNewsDTO {
   content?: string;
   thumbnail?: string;
   featured?: string;
+}
+
+export class UpdateSectionsDTO {
+  _id = '';
+  sections: IProjectSection[] = [];
 }

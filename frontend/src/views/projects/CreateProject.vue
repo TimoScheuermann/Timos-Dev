@@ -33,6 +33,41 @@
       title="Display on Home"
     />
     <br />
+
+    <tl-grid minWidth="100" gap="0">
+      <tc-select
+        :showSelection="false"
+        tfbackground="error"
+        :multiple="true"
+        :dark="$store.getters.darkmode"
+        placeholder="Design Tools"
+        @selectedItems="i => (createProject.designTools = i)"
+      >
+        <tc-select-item v-for="i in designTools" :key="i" :title="i" />
+      </tc-select>
+      <tc-select
+        :showSelection="false"
+        tfbackground="error"
+        :multiple="true"
+        :dark="$store.getters.darkmode"
+        placeholder="Frameworks"
+        @selectedItems="i => (createProject.frameworks = i)"
+      >
+        <tc-select-item v-for="i in frameworks" :key="i" :title="i" />
+      </tc-select>
+      <tc-select
+        :showSelection="false"
+        tfbackground="error"
+        :multiple="true"
+        :dark="$store.getters.darkmode"
+        placeholder="Development"
+        @selectedItems="i => (createProject.development = i)"
+      >
+        <tc-select-item v-for="i in development" :key="i" :title="i" />
+      </tc-select>
+    </tl-grid>
+
+    <br />
     <tc-divider name="Optional" :dark="$store.getters.darkmode" />
 
     <tc-input
@@ -70,13 +105,15 @@
 import { CreateProjectDTO } from '@/utils/models';
 import { Vue, Component } from 'vue-property-decorator';
 import backend from '@/utils/backend';
-
-// tools: string[] = [];
+import { designTools, development, frameworks } from '@/utils/constants';
 
 @Component
 export default class CreateProject extends Vue {
   public createProject = new CreateProjectDTO();
   public disabled = false;
+  public designTools = designTools;
+  public frameworks = frameworks;
+  public development = development;
 
   public submit() {
     this.disabled = true;

@@ -34,7 +34,18 @@
 
       <p line-break>{{ project.description }}</p>
 
-      <p>{{ project }}</p>
+      <tc-divider :dark="true" />
+
+      <tc-button
+        variant="filled"
+        tfbackground="error"
+        icon="card"
+        name="Edit Portfolio Sections"
+        :to="{
+          name: 'edit-portfolio-sections',
+          params: { id: $route.params.id }
+        }"
+      />
     </template>
   </div>
 </template>
