@@ -9,5 +9,8 @@ export class UpdateProjectDTO {
   hero?: string;
   displayOnHome?: boolean;
   thumbnail?: string;
-  tools?: string[];
+
+  designTools?: string[];
+  frameworks?: string[];
+  development?: string[];
 }

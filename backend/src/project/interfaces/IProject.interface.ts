@@ -1,13 +1,23 @@
+import { IProjectSection } from './IProjectSection.interface';
+
 export interface IProject {
   _id?: string;
   title: string;
-  icon: string;
   description: string;
+  icon: string;
+
+  hero: string;
+  thumbnail: string;
+
+  displayOnHome: boolean;
+
   website?: string;
   github?: string;
   npmjs?: string;
-  hero: string;
-  displayOnHome: boolean;
-  thumbnail: string;
-  tools: string[];
+
+  designTools: string[];
+  frameworks: string[];
+  development: string[];
+
+  sections?: IProjectSection[];
 }

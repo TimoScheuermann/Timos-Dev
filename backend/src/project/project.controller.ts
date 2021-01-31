@@ -12,7 +12,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { GroupsGuard, TGroups } from 'src/auth/guards/TGroup.guard';
 import { CreateProjectDTO } from './dtos/CreateProject.dto';
 import { UpdateProjectDTO } from './dtos/UpdateProject.dto';
+import { UpdateSectionsDTO } from './dtos/UpdateSections.dto';
 import { IProject } from './interfaces/IProject.interface';
+import { IProjectSection } from './interfaces/IProjectSection.interface';
 import { ProjectService } from './project.service';
 
 @Controller('project')
@@ -54,5 +56,14 @@ export class ProjectController {
     @Body() updateProjectDTO: UpdateProjectDTO,
   ): Promise<string> {
     return this.projectService.updateProject(updateProjectDTO);
+  }
+
+  @TGroups(['Admin'])
+  @UseGuards(AuthGuard('jwt'), GroupsGuard)
+  @Put('sections')
+  async updateSections(
+    @Body() updateSectionsDTO: UpdateSectionsDTO,
+  ): Promise<IProjectSection[]> {
+    return this.projectService.updateSections(updateSectionsDTO);
   }
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { IProjectSection } from '../interfaces/IProjectSection.interface';
 
 @Schema()
 export class Project extends Document {
@@ -35,6 +36,18 @@ export class Project extends Document {
 
   @Prop()
   displayOnHome: boolean;
+
+  @Prop()
+  designTools: string[];
+
+  @Prop()
+  frameworks: string[];
+
+  @Prop()
+  development: string[];
+
+  @Prop({ required: false })
+  sections?: IProjectSection[];
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
