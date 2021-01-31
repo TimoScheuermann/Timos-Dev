@@ -126,6 +126,7 @@ export class ProjectService {
         designTools: x.designTools,
         development: x.development,
         frameworks: x.frameworks,
+        sections: x.sections,
       } as IProject;
     });
   }
