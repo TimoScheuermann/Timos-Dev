@@ -302,9 +302,9 @@ export default class EditPortfolioSections extends Vue {
     this.newItemPosition = index;
     if (this.newItemPosition === -2) return;
     this.itemTitle = '';
-    this.itemDescription = '-';
-    this.itemAsset = '-';
-    this.itemBackground = '-';
+    this.itemDescription = '';
+    this.itemAsset = '';
+    this.itemBackground = '';
     this.itemLarge = 0;
     this.itemModalOpened = true;
   }
