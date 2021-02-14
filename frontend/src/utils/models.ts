@@ -48,6 +48,11 @@ export class CreateNewsDTO {
   type: 'update' | 'release' | 'feature' = 'update';
   timestamp = 0;
   content = '';
+  thumbnail = '';
+}
+
+export class FeatureNewsDTO {
+  featured = '';
 }
 
 export class UpdateNewsDTO {

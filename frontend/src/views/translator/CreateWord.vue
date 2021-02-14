@@ -1,5 +1,5 @@
 <template>
-  <div class="view-create-word" content>
+  <div class="view-create-word" max-width content>
     <tc-input
       :title="alreadyExists ? 'Acronym does already exist' : 'Acronym'"
       v-model="createDTO.acronym"

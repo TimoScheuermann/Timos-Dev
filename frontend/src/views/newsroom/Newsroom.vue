@@ -1,5 +1,5 @@
 <template>
-  <div class="view-newsroom" content>
+  <div class="view-newsroom" content max-width>
     <tl-flow flow="column" v-if="!news">
       <tc-spinner size="20" :dark="$store.getters.darkmode" />
       <p>Loading news</p>

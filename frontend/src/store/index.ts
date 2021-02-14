@@ -1,5 +1,12 @@
 /* eslint-disable */
-import { INewsExtended, IProject, IUser, IWord } from '@/utils/interfaces';
+import { convertFileSize } from '@/utils/functions';
+import {
+  IAWSFile,
+  INewsExtended,
+  IProject,
+  IUser,
+  IWord
+} from '@/utils/interfaces';
 import { UpdateSectionsDTO } from '@/utils/models';
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -14,7 +21,8 @@ const store = new Vuex.Store({
     userValidated: false,
     projects: null,
     words: null,
-    news: null
+    news: null,
+    driveFiles: null
   },
   getters: {
     isDesktop: (state: any): boolean => {
@@ -46,6 +54,9 @@ const store = new Vuex.Store({
       const news: INewsExtended[] | null = state.news;
       if (!news) return null;
       return news.sort((a, b) => b.timestamp - a.timestamp);
+    },
+    driveFiles: (state: any): IAWSFile[] | null => {
+      return state.driveFiles;
     }
   },
   mutations: {
@@ -126,6 +137,30 @@ const store = new Vuex.Store({
     removeNews(state: any, id: string) {
       if (id && state.news) {
         state.news = state.news.filter((x: INewsExtended) => x._id !== id);
+      }
+    },
+    addDriveFile(state: any, file: IAWSFile) {
+      if (file) {
+        if (typeof file.size === 'number') {
+          file.size = convertFileSize(file.size);
+        }
+        if (!state.driveFiles) state.driveFiles = [];
+        const files: IAWSFile[] = state.driveFiles;
+        if (!files.map(x => x._id).includes(file._id)) {
+          state.driveFiles.push(file);
+          return;
+        }
+        state.driveFiles = files.map(x => {
+          if (x._id !== file._id) return x;
+          else return file;
+        });
+      }
+    },
+    removeDriveFile(state: any, id: string) {
+      if (state.driveFiles) {
+        state.driveFiles = state.driveFiles.filter(
+          (f: IAWSFile) => f._id !== id
+        );
       }
     }
   }

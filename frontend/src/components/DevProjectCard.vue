@@ -5,7 +5,7 @@
     :class="{ 'dev-project-card__dark': dark }"
     @click="open"
   >
-    <div class="content">
+    <div class="content" :darkbg="darkbg">
       <div class="subtitle">{{ subtitle }}</div>
       <div class="title">{{ title }}</div>
     </div>
@@ -21,6 +21,7 @@ export default class DevProjectCard extends Vue {
   @Prop() subtitle!: string;
   @Prop() dark!: boolean;
   @Prop() to!: { name: string };
+  @Prop() darkbg!: boolean;
 
   public open(): void {
     this.$router.push(this.to);
@@ -54,6 +55,12 @@ export default class DevProjectCard extends Vue {
   height: 174px;
 
   .content {
+    &[darkbg] {
+      background: rgba(0, 0, 0, 0.4);
+    }
+    border-radius: inherit;
+    height: 134px;
+
     padding: 20px;
     .title {
       font-weight: bold;

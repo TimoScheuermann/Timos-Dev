@@ -29,10 +29,33 @@ const router = new VueRouter({
     },
     {
       path: '/drive',
-      name: 'drive',
-      component: () => import('@/views/drive/Drive.vue'),
+      component: () => import('@/views-interim/Drive-Interim.vue'),
+      children: [
+        {
+          path: '',
+          name: 'drive',
+          component: () => import('@/views/drive/Drive.vue'),
+          meta: {
+            title: prefix + 'Drive'
+          }
+        },
+        {
+          path: ':item',
+          name: 'drive-item',
+          component: () => import('@/views/drive/DriveItem.vue'),
+          meta: {
+            title: prefix + 'Drive Item'
+          }
+        }
+      ]
+    },
+
+    {
+      path: '/playground',
+      name: 'playground',
+      component: () => import('@/views/playground/Playground.vue'),
       meta: {
-        title: prefix + 'Drive'
+        title: prefix + 'Playground'
       }
     },
     {

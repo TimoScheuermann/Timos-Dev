@@ -1,6 +1,8 @@
 <template>
-  <div class="view-generate-icon-thumbnail" content>
-    <h2>Generate Icon Thumbnail</h2>
+  <div class="view-generate-icon-thumbnail" content max-width>
+    <h2 center>Generate Icon Thumbnail</h2>
+    <br />
+
     <tc-select
       :dark="true"
       @selectedItems="v => (selectedVersion = v[0])"

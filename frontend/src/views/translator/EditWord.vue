@@ -1,5 +1,5 @@
 <template>
-  <div class="view-edit-word" v-if="word" content>
+  <div class="view-edit-word" v-if="word" max-width content>
     <tc-input
       title="Acronym"
       v-model="updateDTO.acronym"

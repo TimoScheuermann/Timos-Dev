@@ -3,5 +3,6 @@ export class CreateNewsDTO {
   project: string;
   type: 'update' | 'release' | 'feature';
   timestamp: number;
+  thumbnail: string;
   content: string;
 }

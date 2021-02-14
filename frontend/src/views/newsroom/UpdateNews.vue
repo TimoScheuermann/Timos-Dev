@@ -1,5 +1,5 @@
 <template>
-  <div class="view-update-news" content v-if="currentNews">
+  <div class="view-update-news" content max-width v-if="currentNews">
     <tc-input
       title="Title"
       v-model="updateDTO.title"
@@ -14,10 +14,10 @@
     />
 
     <tc-input
-      type="file"
       title="Thumbnail"
+      v-model="updateDTO.thumbnail"
       :dark="$store.getters.darkmode"
-      @change="fileChanged"
+      :placeholder="currentNews.thumbnail"
     />
 
     <tc-input
@@ -78,10 +78,10 @@
     <br />
 
     <tc-input
-      type="file"
       title="Featured"
       :dark="$store.getters.darkmode"
-      @change="featuredChanged"
+      v-model="featured.featured"
+      :placeholder="currentNews.featured"
     />
 
     <br />
@@ -107,16 +107,15 @@
 <script lang="ts">
 import backend from '@/utils/backend';
 import { INewsExtended, IProject } from '@/utils/interfaces';
-import { UpdateNewsDTO } from '@/utils/models';
+import { FeatureNewsDTO, UpdateNewsDTO } from '@/utils/models';
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class UpdateNews extends Vue {
-  public file: null | File = null;
-  public featuredFile: null | File = null;
   public disabled = false;
   public updateDTO: UpdateNewsDTO = new UpdateNewsDTO();
   public projects: IProject[] | null = null;
+  public featured: FeatureNewsDTO = new FeatureNewsDTO();
 
   async mounted() {
     if (!this.projects) {
@@ -129,6 +128,7 @@ export default class UpdateNews extends Vue {
           alert(error.message);
         });
     }
+
     if (!this.currentNews) {
       const { data } = await backend.get('newsroom');
       this.$store.commit('setNews', data);
@@ -159,20 +159,6 @@ export default class UpdateNews extends Vue {
       '';
   }
 
-  public featuredChanged(e: Event): void {
-    const element = e.target as HTMLInputElement;
-    if (element.files) {
-      this.featuredFile = element.files[0];
-    }
-  }
-
-  public fileChanged(e: Event): void {
-    const element = e.target as HTMLInputElement;
-    if (element.files) {
-      this.file = element.files[0];
-    }
-  }
-
   public removeFeatured(): void {
     if (this.currentNews) {
       backend
@@ -189,11 +175,9 @@ export default class UpdateNews extends Vue {
   }
 
   public updateFeatured(): void {
-    if (this.currentNews && this.featuredFile) {
-      const formData = new FormData();
-      formData.append('featured', this.featuredFile, this.featuredFile.name);
+    if (this.currentNews && this.featured.featured.length > 0) {
       backend
-        .put('newsroom/featured/' + this.currentNews._id, formData)
+        .put('newsroom/featured/' + this.currentNews._id, this.featured)
         .then(res => {
           this.$store.commit('addNews', res.data);
           this.$router.push({ name: 'newsroom' });
@@ -209,24 +193,20 @@ export default class UpdateNews extends Vue {
     if (this.disabled) return;
     this.disabled = true;
 
-    const formData = new FormData();
-
-    if (this.file) {
-      formData.append('thumbnail', this.file, this.file.name);
+    if (this.updateDTO.timestamp) {
+      this.updateDTO.timestamp = new Date(this.updateDTO.timestamp).getTime();
     }
 
+    // eslint-disable-next-line
+    const dto: any = {};
     Object.entries(this.updateDTO).forEach(([key, value]) => {
-      if (value) {
-        if (key === 'timestamp') {
-          formData.append(key, '' + new Date(value).getTime());
-        } else {
-          formData.append(key, value);
-        }
+      if (value && (value + '').length > 0) {
+        dto[key] = value;
       }
     });
 
     backend
-      .put('newsroom', formData)
+      .put('newsroom', dto)
       .then(res => {
         this.$store.commit('addNews', res.data);
         this.$router.push({ name: 'newsroom' });

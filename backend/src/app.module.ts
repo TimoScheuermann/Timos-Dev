@@ -4,12 +4,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { NewsroomModule } from './newsroom/newsroom.module';
-import { UserModule } from './user/user.module';
-import { ProjectModule } from './project/project.module';
-import { TranslatorModule } from './projects/translator/translator.module';
-import { IconsModule } from './projects/icons/icons.module';
 import { DriveModule } from './drive/drive.module';
+import { NewsroomModule } from './newsroom/newsroom.module';
+import { ProjectModule } from './project/project.module';
+import { IconsModule } from './projects/icons/icons.module';
+import { TranslatorModule } from './projects/translator/translator.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   controllers: [AppController],

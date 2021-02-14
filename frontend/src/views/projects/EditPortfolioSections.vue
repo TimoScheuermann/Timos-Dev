@@ -1,6 +1,6 @@
 <template>
   <div class="view-edit-portfolio-sections" content>
-    <tl-flow horizontal="space-between">
+    <tl-flow horizontal="space-between" max-width>
       <h2>Section Editor</h2>
       <tc-button
         variant="filled"

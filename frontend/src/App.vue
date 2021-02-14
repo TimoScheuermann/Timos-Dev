@@ -14,9 +14,9 @@
           tfcolor="error"
           routeName="projects"
           icon="book-p-filled"
-          title="Projekte"
+          title="Projects"
         />
-        <tc-tabbar-item tfcolor="error" icon="chart-bar" title="Statistik" />
+        <tc-tabbar-item tfcolor="error" icon="chart-bar" title="Statistics" />
       </tc-tabbar>
     </template>
   </div>
@@ -88,6 +88,11 @@ h2 {
   padding-bottom: calc(70px + env(safe-area-inset-bottom));
   @media #{$isMobile} {
   }
+}
+
+[max-width] {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 [line-break] {

@@ -1,21 +1,15 @@
 <template>
-  <div class="view-projects" content>
+  <div class="view-projects" content max-width>
+    <tc-list :dark="$store.getters.darkmode">
+      <tc-list-item error title="Create Project" routeName="create-project" />
+    </tc-list>
+
     <tl-flow flow="column" v-if="!projects">
       <tc-spinner size="20" :dark="$store.getters.darkmode" />
       <p>Loading projects</p>
     </tl-flow>
 
     <template v-else>
-      <tl-flow horizontal="space-between">
-        <h2>Projects</h2>
-        <tc-button
-          routeName="create-project"
-          tfbackground="error"
-          name="add"
-          variant="opaque"
-        />
-      </tl-flow>
-
       <p v-if="projects.length === 0">There are no projects yet...</p>
 
       <template v-else>

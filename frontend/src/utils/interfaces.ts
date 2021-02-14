@@ -48,11 +48,21 @@ export interface INewsExtended {
   featured?: string;
 }
 
-export interface IDriveItem {
+export interface IAWSFile {
   _id: string;
-  filename: string;
   originalname: string;
-  created: number;
+  encoding: string;
+  mimetype: string;
+  ACL: string;
+  ETag: string;
+  Location: string;
+  Key: string;
+  Bucket: string;
+  width: number;
+  height: number;
+  premultiplied: boolean;
+  size: number | string;
+  ContentType: string;
 }
 
 export interface IProjectSection {

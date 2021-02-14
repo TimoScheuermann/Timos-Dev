@@ -1,27 +1,31 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { renameFile } from 'src/newsroom/utils/file-rename.util';
-import { imageFileFilter } from 'src/newsroom/utils/file-upload.util';
+import { MulterExtendedModule } from 'nestjs-multer-aws';
 import { DriveController } from './drive.controller';
 import { DriveService } from './drive.service';
-import { DriveItem, DriveItemSchema } from './schemas/DriveItem.schema';
+import { AWSFile, AWSFileSchema } from './schemas/AWSFile.schema';
 
 @Module({
   controllers: [DriveController],
   providers: [DriveService],
   imports: [
-    MulterModule.register({
-      fileFilter: imageFileFilter,
-      storage: diskStorage({
-        destination: './uploads/drive',
-        filename: renameFile,
-      }),
+    MongooseModule.forFeature([{ name: AWSFile.name, schema: AWSFileSchema }]),
+    MulterExtendedModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          awsConfig: {
+            accessKeyId: configService.get('AWS_ACCESS_KEY'),
+            secretAccessKey: configService.get('AWS_SECRET'),
+            region: configService.get('AWS_REGION'),
+          },
+          bucket: configService.get('AWS_BUCKET'),
+          basePath: 'drive',
+          fileSize: '250KB',
+        };
+      },
     }),
-    MongooseModule.forFeature([
-      { name: DriveItem.name, schema: DriveItemSchema },
-    ]),
   ],
 })
 export class DriveModule {}

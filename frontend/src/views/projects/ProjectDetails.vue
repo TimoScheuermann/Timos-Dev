@@ -1,5 +1,5 @@
 <template>
-  <div class="view-project-details" content>
+  <div class="view-project-details" content max-width>
     <tl-flow v-if="doesntExist" flow="column">
       <br />
       <i error huge class="ti-exclamation-triangle" />
@@ -11,24 +11,25 @@
       <p>Loading project</p>
     </tl-flow>
     <template v-else>
-      <h1 center>{{ project.title }}</h1>
-      <br />
-      <tl-flow horizontal="space-around" class="buttons">
-        <a v-if="portfolio" :href="portfolio" target="_blank">P</a>
-        <a v-if="website" :href="website" target="_blank">
-          <i class="ti-share" />
-        </a>
-        <a v-if="github" :href="github" target="_blank">
-          <i class="ti-github" />
-        </a>
-        <a v-if="npmjs" :href="npmjs" target="_blank">N</a>
-        <router-link
-          edit
-          :to="{ name: 'update-project', params: { id: $route.params.id } }"
-        >
-          <i class="ti-pencil" />
-        </router-link>
-      </tl-flow>
+      <div class="project-head-grid">
+        <tc-avatar :src="project.thumbnail"></tc-avatar>
+        <tl-flow horizontal="space-around" class="buttons">
+          <a v-if="portfolio" :href="portfolio" target="_blank">P</a>
+          <a v-if="website" :href="website" target="_blank">
+            <i class="ti-share" />
+          </a>
+          <a v-if="github" :href="github" target="_blank">
+            <i class="ti-github" />
+          </a>
+          <a v-if="npmjs" :href="npmjs" target="_blank">N</a>
+          <router-link
+            edit
+            :to="{ name: 'update-project', params: { id: $route.params.id } }"
+          >
+            <i class="ti-pencil" />
+          </router-link>
+        </tl-flow>
+      </div>
 
       <tc-divider :dark="$store.getters.darkmode" />
 
@@ -61,7 +62,7 @@ export default class ProjectDetails extends Vue {
 
   get portfolio(): string | null {
     if (this.project)
-      return `https://timos.design/projects/${this.project.title}`;
+      return `https://timos.design/project/${this.project.title}`;
     return null;
   }
 
@@ -110,6 +111,10 @@ export default class ProjectDetails extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.project-head-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
 .buttons {
   a {
     $scale: 44px;

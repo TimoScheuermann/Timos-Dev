@@ -1,5 +1,5 @@
 <template>
-  <div class="view-translator" content>
+  <div class="view-translator" content max-width>
     <tl-flow flow="column" v-if="!words">
       <tc-spinner size="20" :dark="$store.getters.darkmode" />
       <p>Loading words</p>

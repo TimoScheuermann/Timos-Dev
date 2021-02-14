@@ -1,5 +1,5 @@
 <template>
-  <div class="view-create-project" content>
+  <div class="view-create-project" content max-width>
     <tc-input
       :dark="$store.getters.darkmode"
       title="Title"

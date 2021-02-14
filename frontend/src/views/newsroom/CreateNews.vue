@@ -1,5 +1,5 @@
 <template>
-  <div class="view-create-news" content v-if="projects">
+  <div class="view-create-news" content max-width v-if="projects">
     <tc-input
       title="Title"
       v-model="createDTO.title"
@@ -12,10 +12,9 @@
     />
 
     <tc-input
-      type="file"
       title="Thumbnail"
+      v-model="createDTO.thumbnail"
       :dark="$store.getters.darkmode"
-      @change="fileChanged"
     />
 
     <tc-input
@@ -72,7 +71,6 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class CreateNews extends Vue {
-  public file: null | File = null;
   public disabled = false;
   public createDTO: CreateNewsDTO = new CreateNewsDTO();
   public projects: IProject[] | null = null;
@@ -96,32 +94,15 @@ export default class CreateNews extends Vue {
       '';
   }
 
-  public fileChanged(e: Event): void {
-    const element = e.target as HTMLInputElement;
-    if (element.files) {
-      this.file = element.files[0];
-    }
-  }
-
   public submit(): void {
     if (this.disabled) return;
-    if (!this.file) return;
     this.disabled = true;
 
-    const formData = new FormData();
-    formData.append('thumbnail', this.file, this.file.name);
-    Object.entries(this.createDTO).forEach(([key, value]) => {
-      if (value) {
-        if (key === 'timestamp') {
-          formData.append(key, '' + new Date(value).getTime());
-        } else {
-          formData.append(key, value);
-        }
-      }
-    });
-
+    if (this.createDTO.timestamp) {
+      this.createDTO.timestamp = new Date(this.createDTO.timestamp).getTime();
+    }
     backend
-      .post('newsroom', formData)
+      .post('newsroom', this.createDTO)
       .then(res => {
         this.$store.commit('addNews', res.data);
         this.$router.push({ name: 'newsroom' });
