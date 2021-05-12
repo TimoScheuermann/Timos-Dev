@@ -6,7 +6,7 @@ export class PatchFileValidator {
   public static validate(dto: PatchFileDto): PatchFileDto {
     const { folderId, name, pinned, tags } = dto;
 
-    if (folderId && !isValidObjectId(folderId)) {
+    if (!folderId && !isValidObjectId(folderId)) {
       throw new UnprocessableEntityException('Invalid folder id');
     }
 
