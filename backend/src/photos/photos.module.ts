@@ -2,15 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterExtendedModule } from 'nestjs-multer-aws';
-import { IconsController } from './icons.controller';
-import { IconsService } from './icons.service';
-import { Icon, IconSchema } from './schemas/Icon.schema';
+import { PhotosController } from './photos.controller';
+import { PhotosService } from './photos.service';
+import { TPFile, TPFileSchema } from './schemas/TPFile.schema';
+import { TPFolder, TPFolderSchema } from './schemas/TPFolder.schema';
 
 @Module({
-  controllers: [IconsController],
-  providers: [IconsService],
   imports: [
-    MongooseModule.forFeature([{ name: Icon.name, schema: IconSchema }]),
     MulterExtendedModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
@@ -21,11 +19,17 @@ import { Icon, IconSchema } from './schemas/Icon.schema';
             region: configService.get('AWS_REGION'),
           },
           bucket: configService.get('AWS_BUCKET'),
-          basePath: 'timos-icons',
-          fileSize: '250KB',
+          basePath: 'lib',
+          fileSize: '10MB',
         };
       },
     }),
+    MongooseModule.forFeature([
+      { name: TPFolder.name, schema: TPFolderSchema },
+      { name: TPFile.name, schema: TPFileSchema },
+    ]),
   ],
+  controllers: [PhotosController],
+  providers: [PhotosService],
 })
-export class IconsModule {}
+export class PhotosModule {}

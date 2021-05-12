@@ -1,0 +1,24 @@
+@font-face {
+	font-family: "iconfont";
+	src: url("iconfont.eot?94b397af23f4bbaef05b1f1b3f501a61?#iefix") format("embedded-opentype"),
+url("iconfont.woff2?94b397af23f4bbaef05b1f1b3f501a61") format("woff2"),
+url("iconfont.woff?94b397af23f4bbaef05b1f1b3f501a61") format("woff");
+}
+
+.icon {
+	line-height: 1;
+}
+
+.icon:before {
+	font-family: iconfont !important;
+	font-style: normal;
+	font-weight: normal !important;
+	vertical-align: top;
+}
+
+.icon-microphone:before {
+	content: "\f101";
+}
+.icon-house-duo:before {
+	content: "\f102";
+}
