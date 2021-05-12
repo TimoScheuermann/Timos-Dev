@@ -15,7 +15,7 @@ export class PatchFileValidator {
     }
 
     return {
-      folderId: folderId || undefined,
+      folderId: folderId,
       name: name,
       pinned: !!pinned,
       tags: tags,

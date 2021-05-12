@@ -78,17 +78,9 @@ export class PhotosService {
   }
 
   public async patchFile(id: string, dto: PatchFileDto): Promise<TPFile> {
-    await this.getFile(id);
-
     dto = PatchFileValidator.validate(dto);
-
-    if (dto.folderId) {
-      const folders = await this.getFolders();
-      const folderIds = folders.map((x) => x._id);
-      if (!folderIds.includes(dto.folderId)) {
-        throw new UnprocessableEntityException('Invalid Folder ID');
-      }
-    }
+    await this.getFile(id);
+    await this.getFolder(dto.folderId);
 
     await this.tpFileModel.updateOne({ _id: id }, { $set: dto });
 
