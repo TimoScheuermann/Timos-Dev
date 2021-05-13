@@ -125,4 +125,13 @@ export class PhotosController {
   async unpinFolder(@Param('id') id: string): Promise<void> {
     await this.photosService.pinFolder(id, false);
   }
+
+  @TGroups(['admin'])
+  @UseGuards(AuthGuard('jwt'), GroupsGuard)
+  @Post('search')
+  async searchLib(
+    @Body() body: { q: string },
+  ): Promise<{ folders: TPFolder[]; files: TPFile[] }> {
+    return this.photosService.searchLib(body.q);
+  }
 }

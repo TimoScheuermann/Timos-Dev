@@ -5,6 +5,7 @@ import { Document } from 'mongoose';
   toJSON: {
     virtuals: true,
     transform: (_doc: TPFile, ret: TPFile) => {
+      ret.src = ret.Location;
       delete ret._id;
       delete ret.__v;
       delete ret.originalname;
@@ -16,7 +17,6 @@ import { Document } from 'mongoose';
       delete ret.Bucket;
       delete ret.premultiplied;
       delete ret.ContentType;
-      ret.src = ret.Location;
       delete ret.Location;
       return ret;
     },

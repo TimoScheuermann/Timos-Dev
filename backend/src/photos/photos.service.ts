@@ -147,6 +147,23 @@ export class PhotosService {
     await this.tpFolderModel.updateOne({ _id: id }, { $set: { pinned: pin } });
   }
 
+  public async searchLib(
+    query: string,
+  ): Promise<{ folders: TPFolder[]; files: TPFile[] }> {
+    const reg = new RegExp(query, 'i');
+    const folders = await this.tpFolderModel.find({
+      $or: [{ name: reg }, { icon: reg }],
+    });
+    const files = await this.tpFileModel.find({
+      $or: [{ name: reg }, { $expr: { $in: [reg, '$tags'] } }],
+    });
+
+    return {
+      folders: folders,
+      files: files,
+    };
+  }
+
   private async deleteFileOnAWS(Key: string): Promise<void> {
     if (!Key) return;
 
@@ -168,11 +185,11 @@ export class PhotosService {
   private async getFolderTree(
     id: string,
     subFolders: string[] = [],
-  ): Promise<any> {
+  ): Promise<string[]> {
     const folders = await this.tpFolderModel.find({ parent: id });
     await Promise.all(
       folders.map(async (f) => {
-        subFolders.push(f._id);
+        subFolders.push(f.toJSON().id);
         subFolders.push(...(await this.getFolderTree(f._id, subFolders)));
         return f;
       }),

@@ -20,9 +20,9 @@ export class PatchFolderValidator {
 
     return {
       color: color,
-      icon: icon && icon.length > 0 ? icon : undefined,
+      icon: icon && icon.length > 0 ? icon : null,
       name: name,
-      parent: parent && parent.length > 0 ? parent : undefined,
+      parent: parent && parent.length > 0 ? parent : null,
       pinned: !!pinned,
     };
   }
