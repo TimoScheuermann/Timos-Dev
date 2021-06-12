@@ -5,7 +5,9 @@ import {
   INewsExtended,
   IProject,
   IUser,
-  IWord
+  IWord,
+  VMComponent,
+  VMProp
 } from '@/utils/interfaces';
 import { UpdateSectionsDTO } from '@/utils/models';
 import Vue from 'vue';
@@ -22,7 +24,9 @@ const store = new Vuex.Store({
     projects: null,
     words: null,
     news: null,
-    driveFiles: null
+    driveFiles: null,
+    vmComponents: [],
+    vmProps: []
   },
   getters: {
     isDesktop: (state: any): boolean => {
@@ -57,6 +61,12 @@ const store = new Vuex.Store({
     },
     driveFiles: (state: any): IAWSFile[] | null => {
       return state.driveFiles;
+    },
+    vmComponents: (state: any): VMComponent[] => {
+      return state.vmComponents;
+    },
+    vmProps: (state: any): VMProp[] => {
+      return state.vmProps;
     }
   },
   mutations: {
@@ -162,6 +172,43 @@ const store = new Vuex.Store({
           (f: IAWSFile) => f._id !== id
         );
       }
+    },
+    addVMComponent(state: any, comp: VMComponent): void {
+      let exists = false;
+      state.vmComponents = state.vmComponents.map((x: VMComponent) => {
+        if (x.id === comp.id) {
+          exists = true;
+          return comp;
+        }
+        return x;
+      });
+      if (!exists) state.vmComponents.push(comp);
+
+      state.vmComponents = (state.vmComponents as VMComponent[]).sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+    },
+    removeVMComponent(state: any, id: string): void {
+      state.vmComponents = state.vmComponents.fiter(
+        (x: VMComponent) => x.id !== id
+      );
+    },
+    addVMProp(state: any, prop: VMProp): void {
+      let exists = false;
+      state.vmProps = state.vmProps.map((x: VMProp) => {
+        if (x.id === prop.id) {
+          exists = true;
+          return prop;
+        }
+        return x;
+      });
+      if (!exists) state.vmProps.push(prop);
+      state.vmProps = (state.vmProps as VMProp[]).sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+    },
+    removeVMProp(state: any, id: string): void {
+      state.vmProps = state.vmProps.fiter((x: VMProp) => x.id !== id);
     }
   }
 });

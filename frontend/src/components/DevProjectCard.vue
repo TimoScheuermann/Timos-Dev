@@ -40,7 +40,7 @@ export default class DevProjectCard extends Vue {
     color: $color_dark;
   }
 
-  background-position: center right;
+  background-position: center;
   background-size: cover;
   border-radius: $border-radius;
   cursor: pointer;

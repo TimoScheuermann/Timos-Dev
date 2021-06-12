@@ -1,24 +1,45 @@
 <template>
   <div class="dev">
-    <DevRouterView />
-
-    <template v-if="$store.getters.valid">
-      <tc-tabbar :dark="$store.getters.darkmode" :key="$route.name">
-        <tc-tabbar-item
-          tfcolor="error"
-          routeName="home"
-          icon="house"
-          title="Home"
-        />
-        <tc-tabbar-item
-          tfcolor="error"
+    <vm-navbar v-if="$store.getters.valid" :title="$route.meta.title">
+      <template slot="action" v-if="$route.name === 'vuement'">
+        <vm-flow style="max-width: 400px; margin: 0 auto;">
+          <vm-button
+            routeName="vuement-add-component"
+            icon="ti-plus"
+            title="Component"
+          />
+          <vm-button
+            routeName="vuement-add-property"
+            icon="ti-plus"
+            title="Property"
+          />
+        </vm-flow>
+        <vm-spacer />
+      </template>
+      <template v-if="$store.getters.isDesktop">
+        <vm-navbar-item routeName="home" icon="ti-house" title="Home" />
+        <vm-navbar-item
           routeName="projects"
-          icon="book-p-filled"
+          icon="ti-book-p-filled"
           title="Projects"
         />
-        <tc-tabbar-item tfcolor="error" icon="chart-bar" title="Statistics" />
-      </tc-tabbar>
-    </template>
+        <vm-navbar-item icon="ti-chart-bar" title="Statistics" />
+      </template>
+    </vm-navbar>
+
+    <DevRouterView />
+
+    <vm-tabbar v-if="$store.getters.valid && !$store.getters.isDesktop">
+      <vm-tabbar-item routeName="home" icon="ti-house" title="Home" />
+      <vm-tabbar-item
+        routeName="projects"
+        icon="ti-book-p-filled"
+        title="Projects"
+      />
+      <vm-tabbar-item icon="ti-chart-bar" title="Statistics" />
+    </vm-tabbar>
+
+    <vm-notification />
   </div>
 </template>
 
@@ -54,18 +75,11 @@ html {
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
 }
-html {
-  background: $background;
-  color: $color;
-  @media #{$isDark} {
-    background: $background_dark;
-    color: $color_dark;
-  }
-}
+
 body {
-  min-height: 100vh;
   margin: 0;
 }
+
 h1,
 h2 {
   margin: 0;
@@ -76,7 +90,7 @@ h2 {
 }
 
 [error] {
-  color: $error;
+  color: rgba(var(--vm-error), 1);
 }
 
 [huge] {
@@ -84,13 +98,11 @@ h2 {
 }
 
 [content] {
-  padding: 20px 5vw calc(20px + env(safe-area-inset-bottom));
-  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  padding: calc(70px + env(safe-area-inset-bottom)) 5vw
+    calc(20px + env(safe-area-inset-bottom));
   @media #{$isMobile} {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
-}
-
-[max-width] {
   max-width: 800px;
   margin: 0 auto;
 }

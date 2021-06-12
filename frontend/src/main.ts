@@ -6,15 +6,19 @@ import * as TCComponents from 'tccomponents_vue';
 import 'tccomponents_vue/lib/tccomponents_vue.css';
 import Vue from 'vue';
 import { Route } from 'vue-router';
+import Vuement from 'vuement';
 import './registerServiceWorker';
 import { getUserFromJWT, verfiyUser } from './utils/auth';
 
+Vue.use(Vuement, { theme: 'dark' });
 Vue.config.productionTip = false;
 
 Vue.prototype.$translatorBanner =
-  'https://api.timos.design:3002/drive/file/408be7f371ec4d6a99e0920b645a1804.png';
+  'https://timos.s3.eu-central-1.amazonaws.com/drive/timos-translator/6c1fb33c-5a9e-4e08-bae6-913d6d6c682c.png';
 Vue.prototype.$newsroomBanner =
-  'https://api.timos.design:3002/drive/file/9db66ac6e6014518885f044c46b937a9.png';
+  'https://timos.s3.eu-central-1.amazonaws.com/drive/newsroom/36d4b0ca-cdb8-40e1-8e90-d57433544d70.png';
+Vue.prototype.$iconsBanner =
+  'https://timos.s3.eu-central-1.amazonaws.com/drive/newsroom-introductions/db856341-a4bc-4e77-bf8d-158f336131de.jpeg';
 
 for (const component in TCComponents) {
   Vue.component(component, TCComponents[component]);

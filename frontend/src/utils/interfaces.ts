@@ -78,3 +78,20 @@ export interface IProjectSectionItem {
   description: string;
   size: 'large' | 'normal';
 }
+
+export interface VMComponent {
+  id: string;
+  name: string;
+  image?: string;
+  children: string[];
+  isChild?: boolean;
+  props: string[];
+}
+
+export interface VMProp {
+  id: string;
+  name: string;
+  value: string;
+  description: string;
+  type: string;
+}

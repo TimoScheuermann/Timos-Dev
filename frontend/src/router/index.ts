@@ -49,7 +49,67 @@ const router = new VueRouter({
         }
       ]
     },
+    {
+      path: '/icons',
+      component: () => import('@/views-interim/Icons-Interim.vue'),
+      children: [
+        {
+          path: '',
+          name: 'icons',
+          component: () => import('@/views/icons/Icons.vue'),
+          meta: {
+            title: prefix + 'Icons'
+          }
+        }
+      ]
+    },
 
+    {
+      path: '/vuement',
+      component: () => import('@/views-interim/Vuement-Interim.vue'),
+      children: [
+        {
+          path: '',
+          name: 'vuement',
+          component: () => import('@/views/vuement/Vuement.vue'),
+          meta: {
+            title: 'Vuement'
+          }
+        },
+        {
+          path: 'add-component',
+          name: 'vuement-add-component',
+          component: () => import('@/views/vuement/AddComponent.vue'),
+          meta: {
+            title: 'Add Component | Vuement'
+          }
+        },
+        {
+          path: 'edit-component/:id',
+          name: 'vuement-edit-component',
+          component: () => import('@/views/vuement/EditComponent.vue'),
+          meta: {
+            title: 'Edit Component | Vuement'
+          }
+        },
+        {
+          path: 'add-property',
+          name: 'vuement-add-property',
+          component: () => import('@/views/vuement/AddProperty.vue'),
+          meta: {
+            title: 'Add Property | Vuement'
+          }
+        },
+        {
+          path: 'edit-property/:id',
+          name: 'vuement-edit-property',
+          component: () => import('@/views/vuement/EditProperty.vue'),
+          meta: {
+            title: 'Edit Property | Vuement'
+          }
+        }
+      ]
+    },
     {
       path: '/playground',
       name: 'playground',
