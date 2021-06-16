@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { VMProp } from '../models/VMProp.model';
 
 @Schema({
   toJSON: {
@@ -25,7 +26,7 @@ export class VMComponent extends Document {
   isChild?: boolean;
 
   @Prop()
-  props: string[];
+  props: VMProp[];
 }
 
 export const VMComponentSchema = SchemaFactory.createForClass(VMComponent);

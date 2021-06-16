@@ -1,21 +1,6 @@
 <template>
   <div class="dev">
     <vm-navbar v-if="$store.getters.valid" :title="$route.meta.title">
-      <template slot="action" v-if="$route.name === 'vuement'">
-        <vm-flow style="max-width: 400px; margin: 0 auto;">
-          <vm-button
-            routeName="vuement-add-component"
-            icon="ti-plus"
-            title="Component"
-          />
-          <vm-button
-            routeName="vuement-add-property"
-            icon="ti-plus"
-            title="Property"
-          />
-        </vm-flow>
-        <vm-spacer />
-      </template>
       <template v-if="$store.getters.isDesktop">
         <vm-navbar-item routeName="home" icon="ti-house" title="Home" />
         <vm-navbar-item

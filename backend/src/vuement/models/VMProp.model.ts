@@ -1,4 +1,4 @@
-export class CreateVMPropDTO {
+export class VMProp {
   name: string;
   value: string;
   description: string;

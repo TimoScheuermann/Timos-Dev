@@ -91,22 +91,6 @@ const router = new VueRouter({
           meta: {
             title: 'Edit Component | Vuement'
           }
-        },
-        {
-          path: 'add-property',
-          name: 'vuement-add-property',
-          component: () => import('@/views/vuement/AddProperty.vue'),
-          meta: {
-            title: 'Add Property | Vuement'
-          }
-        },
-        {
-          path: 'edit-property/:id',
-          name: 'vuement-edit-property',
-          component: () => import('@/views/vuement/EditProperty.vue'),
-          meta: {
-            title: 'Edit Property | Vuement'
-          }
         }
       ]
     },

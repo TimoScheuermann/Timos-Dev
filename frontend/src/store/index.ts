@@ -192,23 +192,6 @@ const store = new Vuex.Store({
       state.vmComponents = state.vmComponents.fiter(
         (x: VMComponent) => x.id !== id
       );
-    },
-    addVMProp(state: any, prop: VMProp): void {
-      let exists = false;
-      state.vmProps = state.vmProps.map((x: VMProp) => {
-        if (x.id === prop.id) {
-          exists = true;
-          return prop;
-        }
-        return x;
-      });
-      if (!exists) state.vmProps.push(prop);
-      state.vmProps = (state.vmProps as VMProp[]).sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-    },
-    removeVMProp(state: any, id: string): void {
-      state.vmProps = state.vmProps.fiter((x: VMProp) => x.id !== id);
     }
   }
 });

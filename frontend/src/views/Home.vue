@@ -2,10 +2,9 @@
   <div class="view-home" content>
     <vm-grid width="220px">
       <DevProjectCard
-        :dark="true"
         subtitle="Manage Components"
         title="Vuement"
-        :background="$iconsBanner"
+        :background="$vuementBanner"
         :to="{ name: 'vuement' }"
       />
       <DevProjectCard

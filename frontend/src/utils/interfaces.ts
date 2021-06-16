@@ -85,11 +85,10 @@ export interface VMComponent {
   image?: string;
   children: string[];
   isChild?: boolean;
-  props: string[];
+  props: VMProp[];
 }
 
 export interface VMProp {
-  id: string;
   name: string;
   value: string;
   description: string;

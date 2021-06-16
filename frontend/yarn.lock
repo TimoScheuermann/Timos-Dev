@@ -9132,10 +9132,10 @@ vue@^2.5.16, vue@^2.6.11:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
-vuement@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/vuement/-/vuement-0.8.1.tgz#7f921c63cde96526fab553f9db36a2c5cf28083c"
-  integrity sha512-hEMXY5R8GVKZCNK8MI34pGuE9aOiFCerZuAcV+OzGNzyrT5/IBEG2oa3ex+4sFMBQefnHaKBjS7drUvZcS+09g==
+vuement@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/vuement/-/vuement-0.9.0.tgz#3337babed9bacb585e5ccd98bd0d34de5cffb565"
+  integrity sha512-JCYMApqhGe/yVZwABT4wtz7gCttYPTF/SM7PIGrFCUXo+y3vuTvJk0nc3O8e9vITnMG8Zyo0LoOLc8kmST9jAA==
   dependencies:
     core-js "^3.6.5"
     register-service-worker "^1.7.1"

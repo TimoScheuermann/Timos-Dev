@@ -19,6 +19,8 @@ Vue.prototype.$newsroomBanner =
   'https://timos.s3.eu-central-1.amazonaws.com/drive/newsroom/36d4b0ca-cdb8-40e1-8e90-d57433544d70.png';
 Vue.prototype.$iconsBanner =
   'https://timos.s3.eu-central-1.amazonaws.com/drive/newsroom-introductions/db856341-a4bc-4e77-bf8d-158f336131de.jpeg';
+Vue.prototype.$vuementBanner =
+  'https://vuement.com/pwa/splash/apple-splash-2732-2048.jpg';
 
 for (const component in TCComponents) {
   Vue.component(component, TCComponents[component]);

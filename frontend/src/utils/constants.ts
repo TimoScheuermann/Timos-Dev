@@ -29,7 +29,9 @@ export const development: string[] = sortStringArray([
   'MySQL',
   'Git',
   'NPM.js',
-  'Yarn'
+  'Yarn',
+  'Go',
+  'Elasticsearch'
 ]);
 
 type SPEC = {
