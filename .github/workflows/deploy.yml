@@ -33,6 +33,7 @@ jobs:
       - name: Deploy to Docker registry
         uses: docker/build-push-action@v2
         with:
+          file: {context}/backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/timos-dev-backend:${{ github.sha }}, ${{ secrets.DOCKER_USERNAME }}/timos-dev-backend:latest
 
